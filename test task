@@ -1,0 +1,31 @@
+$shops['shop1'][1] = [ 'strat' => '9:00', 'end' => '20:00' ];
+$shops['shop1'][2] = [ 'strat' => '9:00', 'end' => '20:00' ];
+$shops['shop1'][3] = [ 'strat' => '9:00', 'end' => '17:00' ];
+$shops['shop1'][4] = [ 'strat' => '9:30', 'end' => '23:55' ];	
+$shops['shop2'][4] = [ 'strat' => '9:00', 'end' => '17:55' ];
+
+$n = date("w", mktime(0,0,0,date("m"),date("d"),date("Y")));
+
+foreach($shops as $key =>$value) {	    
+	if ( isset($shops[$key][$n]) ) {
+		$dateTime = new DateTime( $shops[$key][$n]['strat'] );
+		$diff = $dateTime->diff(new DateTime);
+		
+		if ($diff->invert) {
+			echo 'Магазин ', $key, ' не работает. Окрытие через: ', (($diff->h) ? $diff->h.' ч ' : '' ), $diff->i, ' мин.<br />';
+		} else {    	            
+			$dateTime = new DateTime( $shops[$key][$n]['end'] );
+			$diff = $dateTime->diff(new DateTime);
+			
+			if ($diff->invert) {
+				echo 'Магазин ', $key, ' закрывается через: ', (($diff->h) ? $diff->h.' ч ' : '' ), $diff->i, ' мин.<br />';
+			} else {
+				$dateTime = new DateTime( $shops[$key][$n]['strat'] );
+				$diff = $dateTime->diff(new DateTime);
+				echo 'Магазин ', $key, ' не работает. Окрытие через: ', (($diff->h) ? $diff->h.' ч ' : '' ), $diff->i, ' мин.<br />';    	               
+			}
+		}
+	} else {
+		echo 'Магазин ', $key, ' в этот день не работает', '<br />';
+	}
+}
